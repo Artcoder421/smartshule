@@ -79,14 +79,6 @@ class ApiService {
     await http.delete(Uri.parse('$baseUrl/users/$userId'));
   }
 
-  // Existing methods for other models
-  Future<List<Student>> getStudents() async {
-    final response = await http.get(Uri.parse('$baseUrl/students'));
-    return _handleResponse<List<Student>>(response, (data) {
-      return (data as List).map((e) => Student.fromJson(e)).toList();
-    });
-  }
-
   Future<List<Bus>> getBuses() async {
     final response = await http.get(Uri.parse('$baseUrl/buses'));
     return _handleResponse<List<Bus>>(response, (data) {
@@ -94,31 +86,10 @@ class ApiService {
     });
   }
 
-  Future<List<Route>> getRoutes() async {
-    final response = await http.get(Uri.parse('$baseUrl/routes'));
-    return _handleResponse<List<Route>>(response, (data) {
-      return (data as List).map((e) => Route.fromJson(e)).toList();
-    });
-  }
-
   Future<List<Alert>> getAlerts() async {
     final response = await http.get(Uri.parse('$baseUrl/alerts'));
     return _handleResponse<List<Alert>>(response, (data) {
       return (data as List).map((e) => Alert.fromJson(e)).toList();
-    });
-  }
-
-  Future<List<Attendance>> getAttendance() async {
-    final response = await http.get(Uri.parse('$baseUrl/attendance'));
-    return _handleResponse<List<Attendance>>(response, (data) {
-      return (data as List).map((e) => Attendance.fromJson(e)).toList();
-    });
-  }
-
-  Future<List<RouteChecking>> getRouteCheckings() async {
-    final response = await http.get(Uri.parse('$baseUrl/route-checkings'));
-    return _handleResponse<List<RouteChecking>>(response, (data) {
-      return (data as List).map((e) => RouteChecking.fromJson(e)).toList();
     });
   }
 

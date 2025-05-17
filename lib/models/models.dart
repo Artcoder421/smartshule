@@ -1,52 +1,5 @@
 // Models for School Bus System
 
-class Student {
-  final int studentId;
-  final int userId;
-  final int parentId;
-  final String firstName;
-  final String lastName;
-  final String grade;
-  final int? routeId;
-  final String? pickupLocation;
-  final String? dropoffLocation;
-  final bool isActive;
-  final DateTime createdAt;
-  final DateTime updatedAt;
-
-  Student({
-    required this.studentId,
-    required this.userId,
-    required this.parentId,
-    required this.firstName,
-    required this.lastName,
-    required this.grade,
-    this.routeId,
-    this.pickupLocation,
-    this.dropoffLocation,
-    required this.isActive,
-    required this.createdAt,
-    required this.updatedAt,
-  });
-
-  factory Student.fromJson(Map<String, dynamic> json) {
-    return Student(
-      studentId: json['student_id'],
-      userId: json['user_id'],
-      parentId: json['parent_id'],
-      firstName: json['first_name'],
-      lastName: json['last_name'],
-      grade: json['grade'],
-      routeId: json['route_id'],
-      pickupLocation: json['pickup_location'],
-      dropoffLocation: json['dropoff_location'],
-      isActive: json['is_active'] == 1,
-      createdAt: DateTime.parse(json['created_at']),
-      updatedAt: DateTime.parse(json['updated_at']),
-    );
-  }
-}
-
 class Bus {
   final int busId;
   final String busNumber;
@@ -91,44 +44,6 @@ class Bus {
   }
 }
 
-class Route {
-  final int routeId;
-  final String routeName;
-  final String startPoint;
-  final String endPoint;
-  final double? distance;
-  final int? estimatedTime;
-  final bool isActive;
-  final DateTime createdAt;
-  final DateTime updatedAt;
-
-  Route({
-    required this.routeId,
-    required this.routeName,
-    required this.startPoint,
-    required this.endPoint,
-    this.distance,
-    this.estimatedTime,
-    required this.isActive,
-    required this.createdAt,
-    required this.updatedAt,
-  });
-
-  factory Route.fromJson(Map<String, dynamic> json) {
-    return Route(
-      routeId: json['route_id'],
-      routeName: json['route_name'],
-      startPoint: json['start_point'],
-      endPoint: json['end_point'],
-      distance: json['distance']?.toDouble(),
-      estimatedTime: json['estimated_time'],
-      isActive: json['is_active'] == 1,
-      createdAt: DateTime.parse(json['created_at']),
-      updatedAt: DateTime.parse(json['updated_at']),
-    );
-  }
-}
-
 class Alert {
   final int alertId;
   final String alertType;
@@ -166,67 +81,6 @@ class Alert {
               ? DateTime.parse(json['resolved_at'])
               : null,
       createdAt: DateTime.parse(json['created_at']),
-    );
-  }
-}
-
-class Attendance {
-  final int attendanceId;
-  final int studentId;
-  final int routeId;
-  final String checkType;
-  final DateTime checkedAt;
-  final String? notes;
-
-  Attendance({
-    required this.attendanceId,
-    required this.studentId,
-    required this.routeId,
-    required this.checkType,
-    required this.checkedAt,
-    this.notes,
-  });
-
-  factory Attendance.fromJson(Map<String, dynamic> json) {
-    return Attendance(
-      attendanceId: json['attendance_id'],
-      studentId: json['student_id'],
-      routeId: json['route_id'],
-      checkType: json['check_type'],
-      checkedAt: DateTime.parse(json['checked_at']),
-      notes: json['notes'],
-    );
-  }
-}
-
-class RouteChecking {
-  final int checkingId;
-  final int routeId;
-  final int busId;
-  final int driverId;
-  final String checkType;
-  final DateTime checkedAt;
-  final String? notes;
-
-  RouteChecking({
-    required this.checkingId,
-    required this.routeId,
-    required this.busId,
-    required this.driverId,
-    required this.checkType,
-    required this.checkedAt,
-    this.notes,
-  });
-
-  factory RouteChecking.fromJson(Map<String, dynamic> json) {
-    return RouteChecking(
-      checkingId: json['checking_id'],
-      routeId: json['route_id'],
-      busId: json['bus_id'],
-      driverId: json['driver_id'],
-      checkType: json['check_type'],
-      checkedAt: DateTime.parse(json['checked_at']),
-      notes: json['notes'],
     );
   }
 }

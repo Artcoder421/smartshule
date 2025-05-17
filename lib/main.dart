@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'login.dart';
@@ -20,14 +21,13 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
+  String? _driverId; // Consistently stored as String
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'School Bus Tracking',
-      navigatorKey: _navigatorKey, // Assign the unique key here
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
@@ -57,12 +57,11 @@ class _MyAppState extends State<MyApp> {
         '/login': (context) => const LoginPage(),
         '/admin': (context) => const AdminDashboard(),
         '/teacher': (context) => const TeacherDashboard(),
-        '/driver': (context) => const DriverDashboard(),
         '/matron': (context) => const MatronDashboard(),
         '/parent': (context) => const ParentDashboard(),
-      },
-      onGenerateRoute: (settings) {
-        return MaterialPageRoute(builder: (context) => const LoginPage());
+        '/driver':
+            (context) =>
+                DriverDashboard(driverId: _driverId ?? '0', onLogout: () {}),
       },
     );
   }
@@ -73,8 +72,16 @@ class _MyAppState extends State<MyApp> {
 
     if (userData != null) {
       try {
-        final role = prefs.getString('role') ?? '';
-        switch (role.toLowerCase()) {
+        final userJson = jsonDecode(userData) as Map<String, dynamic>;
+        final role = userJson['role']?.toString().toLowerCase() ?? '';
+        final userId = userJson['id'];
+
+        // Convert to String consistently
+        if (role == 'driver') {
+          _driverId = userId?.toString() ?? '0';
+        }
+
+        switch (role) {
           case 'admin':
             return '/admin';
           case 'teacher':
@@ -89,6 +96,7 @@ class _MyAppState extends State<MyApp> {
             return '/login';
         }
       } catch (e) {
+        debugPrint('Error parsing user data: $e');
         return '/login';
       }
     }
@@ -102,7 +110,7 @@ class _MyAppState extends State<MyApp> {
       case '/teacher':
         return const TeacherDashboard();
       case '/driver':
-        return const DriverDashboard();
+        return DriverDashboard(driverId: _driverId ?? '0', onLogout: () {});
       case '/matron':
         return const MatronDashboard();
       case '/parent':

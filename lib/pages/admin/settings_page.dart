@@ -1,7 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({Key? key}) : super(key: key);
+
+  Future<void> _logout(BuildContext context) async {
+    // Clear any stored user data
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
+
+    // Navigate to login screen and remove all previous routes
+    Navigator.of(context).pushNamedAndRemoveUntil(
+      '/login', // Replace with your actual login route
+      (Route<dynamic> route) => false,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +55,10 @@ class SettingsPage extends StatelessWidget {
                     _buildSettingsButton('Check for Updates'),
                     _buildSettingsButton('Backup Data'),
                     _buildSettingsButton('Reset Settings'),
+                  ]),
+                  const Divider(),
+                  _buildSettingsSection('Account', [
+                    _buildLogoutButton(context),
                   ]),
                 ],
               ),
@@ -92,6 +109,43 @@ class SettingsPage extends StatelessWidget {
       title: Text(title),
       trailing: const Icon(Icons.chevron_right),
       onTap: () {},
+    );
+  }
+
+  Widget _buildLogoutButton(BuildContext context) {
+    return ListTile(
+      title: const Text(
+        'Logout',
+        style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+      ),
+      leading: const Icon(Icons.logout, color: Colors.red),
+      onTap: () {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Confirm Logout'),
+              content: const Text('Are you sure you want to logout?'),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text('Cancel'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    _logout(context);
+                  },
+                  child: const Text(
+                    'Logout',
+                    style: TextStyle(color: Colors.red),
+                  ),
+                ),
+              ],
+            );
+          },
+        );
+      },
     );
   }
 }
